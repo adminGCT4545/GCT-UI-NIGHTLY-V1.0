@@ -1,0 +1,68 @@
+
+> gct-ui@1.0.0 browser-server-puppeteer
+> node browser-server-puppeteer.js
+
+[PuppeteerServer] Real Puppeteer browser control server running on http://localhost:3456
+[PuppeteerServer] Health check: http://localhost:3456/health
+[PuppeteerServer] Browser actions: POST http://localhost:3456/browser/action
+[PuppeteerServer] This server can actually open google.com and control real browsers!
+[PuppeteerServer] Received action: launch { url: 'https://google.com' }
+[PuppeteerServer] Launching browser with URL: https://google.com
+[PuppeteerServer] Launching Puppeteer browser...
+[PuppeteerServer] Browser launched successfully
+[PuppeteerServer] Successfully opened: https://google.com
+[PuppeteerServer] Action result: SUCCESS
+[PuppeteerServer] Received action: screenshot undefined
+[PuppeteerServer] Taking screenshot
+[PuppeteerServer] Action result: SUCCESS
+[PuppeteerServer] Received action: launch { url: 'https://google.com' }
+[PuppeteerServer] Launching browser with URL: https://google.com
+[PuppeteerServer] Received action: launch { url: 'https://google.com' }
+[PuppeteerServer] Launching browser with URL: https://google.com
+[PuppeteerServer] Launch error: ProtocolError: Protocol error (Target.closeTarget): No target with given id found
+    at <instance_members_initializer> (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:101:14)
+    at new Callback (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:105:16)
+    at CallbackRegistry.create (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:23:26)
+    at Connection._rawSend (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:99:26)
+    at Connection.send (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:90:21)
+    at CdpPage.close (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:842:34)
+    at async /home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/browser-server-puppeteer.js:117:25
+[PuppeteerServer] Action result: FAILED
+[PuppeteerServer] Successfully opened: https://google.com
+[PuppeteerServer] Action result: SUCCESS
+[PuppeteerServer] Received action: launch { url: 'https://google.com' }
+[PuppeteerServer] Launching browser with URL: https://google.com
+[PuppeteerServer] Received action: launch { url: 'https://google.com' }
+[PuppeteerServer] Launching browser with URL: https://google.com
+[PuppeteerServer] Launch error: ProtocolError: Protocol error (Target.closeTarget): No target with given id found
+    at <instance_members_initializer> (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:101:14)
+    at new Callback (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:105:16)
+    at CallbackRegistry.create (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:23:26)
+    at Connection._rawSend (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:99:26)
+    at Connection.send (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:90:21)
+    at CdpPage.close (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js:842:34)
+    at async /home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/browser-server-puppeteer.js:117:25
+[PuppeteerServer] Action result: FAILED
+[PuppeteerServer] Successfully opened: https://google.com
+[PuppeteerServer] Action result: SUCCESS
+[PuppeteerServer] Received action: launch { url: 'https://google.com' }
+[PuppeteerServer] Launching browser with URL: https://google.com
+[PuppeteerServer] Successfully opened: https://google.com
+[PuppeteerServer] Action result: SUCCESS
+[PuppeteerServer] Received action: launch { url: 'www.google.com' }
+[PuppeteerServer] Launching browser with URL: www.google.com
+[PuppeteerServer] Launch error: ProtocolError: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    at <instance_members_initializer> (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:101:14)
+    at new Callback (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:105:16)
+    at CallbackRegistry.create (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:23:26)
+    at Connection._rawSend (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:99:26)
+    at CdpCDPSession.send (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/CdpSession.js:73:33)
+    at navigate (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Frame.js:172:51)
+    at CdpFrame.goto (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Frame.js:150:17)
+    at CdpFrame.<anonymous> (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/util/decorators.js:109:27)
+    at CdpPage.goto (/home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Page.js:574:43)
+    at /home/instance-03/Documents/GCT/GCT-UI-GCT_UI_NIGHTLY_VLM/browser-server-puppeteer.js:125:32
+[PuppeteerServer] Action result: FAILED
+
+[PuppeteerServer] Shutting down gracefully...
+[PuppeteerServer] Closing browser...

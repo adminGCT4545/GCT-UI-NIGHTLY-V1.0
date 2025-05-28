@@ -1,0 +1,83 @@
+/* Minimal Font Awesome CSS for GCT UI */
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url('./webfonts/fa-solid-900.woff2') format('woff2'),
+       url('./webfonts/fa-solid-900.woff') format('woff'),
+       url('./webfonts/fa-solid-900.ttf') format('truetype');
+}
+
+.fas {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* Basic icon definitions used in the UI */
+.fa-comment:before { content: "\f075"; }
+.fa-sticky-note:before { content: "\f249"; }
+.fa-cog:before { content: "\f013"; }
+.fa-chart-simple:before { content: "\f553"; }
+.fa-chart-bar:before { content: "\f080"; }
+.fa-globe:before { content: "\f0ac"; }
+.fa-arrow-left:before { content: "\f060"; }
+.fa-paperclip:before { content: "\f0c6"; }
+.fa-play:before { content: "\f04b"; }
+.fa-mouse-pointer:before { content: "\f245"; }
+.fa-keyboard:before { content: "\f11c"; }
+.fa-camera:before { content: "\f030"; }
+.fa-times-circle:before { content: "\f057"; }
+.fa-search-minus:before { content: "\f010"; }
+.fa-search-plus:before { content: "\f00e"; }
+.fa-compress:before { content: "\f066"; }
+
+/* Text formatting icons */
+.fa-bold:before { content: "\f032"; }
+.fa-italic:before { content: "\f033"; }
+.fa-underline:before { content: "\f0cd"; }
+.fa-strikethrough:before { content: "\f0cc"; }
+
+/* Alignment icons */
+.fa-align-left:before { content: "\f036"; }
+.fa-align-center:before { content: "\f037"; }
+.fa-align-right:before { content: "\f038"; }
+.fa-align-justify:before { content: "\f039"; }
+
+/* List icons */
+.fa-list-ul:before { content: "\f0ca"; }
+.fa-list-ol:before { content: "\f0cb"; }
+.fa-indent:before { content: "\f03c"; }
+.fa-outdent:before { content: "\f03b"; }
+
+/* Insert icons */
+.fa-link:before { content: "\f0c1"; }
+.fa-image:before { content: "\f03e"; }
+.fa-table:before { content: "\f0ce"; }
+.fa-code:before { content: "\f121"; }
+.fa-quote-right:before { content: "\f10e"; }
+
+/* Tool icons */
+.fa-undo:before { content: "\f0e2"; }
+.fa-redo:before { content: "\f01e"; }
+.fa-remove-format:before { content: "\f87d"; }
+.fa-exchange-alt:before { content: "\f362"; }
+
+/* Additional icons used in the interface */
+.fa-microphone:before { content: "\f130"; }
+.fa-copy:before { content: "\f0c5"; }
+.fa-bookmark:before { content: "\f02e"; }
+.fa-times:before { content: "\f00d"; }
+.fa-chevron-up:before { content: "\f077"; }
+.fa-chevron-down:before { content: "\f078"; }
+.fa-share-alt:before { content: "\f1e0"; }
+.fa-plus-circle:before { content: "\f055"; }
+.fa-sync-alt:before { content: "\f2f1"; }
+.fa-text-height:before { content: "\f034"; }

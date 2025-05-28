@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(npm install)",
+      "Bash(pkill:*)",
+      "Bash(npx puppeteer browsers:*)"
+    ],
+    "deny": []
+  }
+}

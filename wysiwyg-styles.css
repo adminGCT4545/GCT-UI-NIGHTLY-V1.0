@@ -1,0 +1,361 @@
+/* WYSIWYG Integration Styles */
+
+/* Word processor button group */
+.wp-button-group {
+    border-left: 1px solid #444;
+    padding-left: 10px;
+}
+
+.wp-btn {
+    font-size: 16px;
+}
+
+/* Format painter */
+.format-painter.active {
+    background-color: #0084ff !important;
+    color: white !important;
+}
+
+/* Modals */
+.save-as-modal,
+.templates-modal,
+.word-count-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content {
+    background: #2a2a2a;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Save options */
+.save-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.save-option {
+    background: #333;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.save-option:hover {
+    background: #444;
+    border-color: #0084ff;
+}
+
+.save-option i {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+/* Templates grid */
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.template-item {
+    background: #333;
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.template-item:hover {
+    background: #444;
+    border-color: #0084ff;
+}
+
+.template-icon {
+    display: block;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.template-name {
+    color: #ddd;
+    font-size: 14px;
+}
+
+/* Word count modal */
+.stats-grid {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #333;
+    border-radius: 4px;
+}
+
+.stat-label {
+    color: #888;
+}
+
+.stat-value {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Find & Replace panel */
+.find-replace-panel {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 15px;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.find-replace-content h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.find-replace-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.find-replace-inputs input {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 8px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.find-replace-inputs input:focus {
+    border-color: #0084ff;
+}
+
+.find-replace-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.find-replace-buttons button {
+    background: #333;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.find-replace-buttons button:hover {
+    background: #444;
+}
+
+#find-results {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #888;
+}
+
+/* Collaboration indicator */
+.collaboration-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    padding: 5px 15px;
+    background: rgba(0, 132, 255, 0.1);
+    border-radius: 20px;
+}
+
+.collab-users {
+    display: flex;
+    gap: 5px;
+}
+
+.collab-user {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.collab-status {
+    font-size: 12px;
+    color: #0084ff;
+}
+
+/* Word count indicator */
+.word-count-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #888;
+    z-index: 10;
+}
+
+/* Close modal button */
+.close-modal {
+    background: #444;
+    border: none;
+    color: #ddd;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.close-modal:hover {
+    background: #555;
+}
+
+/* Enhanced textarea and rich text editor for split view */
+.note-editor-panel.split-mode .markdown-editor-pane,
+.note-editor-panel.split-mode .markdown-preview-pane {
+    width: 50%;
+}
+
+.note-editor-panel.split-mode .editor-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* Auto-complete suggestions */
+.autocomplete-suggestions {
+    position: absolute;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #ddd;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background: #333;
+}
+
+/* Keyboard shortcuts help */
+.keyboard-shortcuts {
+    font-size: 12px;
+    color: #888;
+    margin-top: 10px;
+}
+
+.keyboard-shortcuts kbd {
+    background: #333;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .save-options,
+    .templates-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .find-replace-panel {
+        left: 20px;
+        right: 20px;
+        top: 100px;
+    }
+    
+    .word-count-indicator {
+        bottom: 60px;
+    }
+}
+
+/* Print preview mode */
+.print-preview-mode {
+    background: white;
+    color: black;
+}
+
+.print-preview-mode .markdown-preview-pane {
+    background: white;
+    color: black;
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    padding: 40px;
+    max-width: 800px;
+}
+
+/* Enhanced focus mode */
+.focus-mode .notes-panel,
+.focus-mode .sidebar,
+.focus-mode .main-header {
+    display: none;
+}
+
+.focus-mode .note-editor-panel {
+    left: 0;
+    right: 0;
+}

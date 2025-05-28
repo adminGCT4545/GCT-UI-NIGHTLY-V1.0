@@ -1,0 +1,18 @@
+{
+  "name": "gct-ui",
+  "version": "1.0.0",
+  "description": "GCT UI with KYNSEY AI Assistant",
+  "scripts": {
+    "browser-server": "node browser-server-ultimate.js",
+    "browser-server-simple": "node browser-server-simple.js",
+    "browser-server-puppeteer": "node browser-server-puppeteer.js",
+    "browser-server-fixed": "node browser-server-fixed.js",
+    "browser-server-ultimate": "node browser-server-ultimate.js",
+    "browser-test": "node browser-control-ultimate.js --test"
+  },
+  "dependencies": {
+    "puppeteer": "^24.9.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

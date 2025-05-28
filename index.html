@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCT UI - Chat</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-panel.css">
+    <link rel="stylesheet" href="css/highlight.vs2015.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="rich-text-editor.css">
+    <link rel="stylesheet" href="wysiwyg-styles.css">
+    <link rel="stylesheet" href="analytics-suite.css">
+    <link rel="stylesheet" href="browser-control.css">
+    <link rel="stylesheet" href="browser-suite.css">
+    <!-- Markdown and sanitization libraries -->
+    <script defer src="js/highlight.min.js"></script>
+    <script defer src="js/marked.min.js"></script>
+    <script defer src="js/purify.min.js"></script>
+    <!-- Configuration -->
+    <script defer src="config.js?v=2"></script>
+    <!-- App scripts -->
+    <script defer src="notes.js?v=2"></script>
+    <script defer src="rich-text-editor.js"></script>
+    <script defer src="wysiwyg-integration.js"></script>
+    <script defer src="script.js"></script>
+    <script defer src="analytics-parser.js"></script>
+    <script defer src="analytics.js?v=2"></script>
+    <script defer src="analytics-suite.js?v=2"></script>
+    <script defer src="admin-panel.js"></script>
+    <script defer src="admin-panel-patch.js"></script>
+    <!-- Core browser UI (needed for panel structure) -->
+    <!-- <script defer src="browser-control-ui.js"></script> -->
+    
+    <!-- Browser control scripts -->
+    <script defer src="browser-ai.js?v=2"></script>
+    <script defer src="browser-actions.js"></script>
+    <script defer src="browser-control-ultimate.js"></script>
+    <script defer src="browser-suite.js"></script>
+</head>
+<body>
+    <!-- Notes Panel -->
+    <div class="notes-panel" id="notes-panel">
+        <div class="notes-header">
+            <h2>Notes</h2>
+            <button class="close-notes" id="close-notes">×</button>
+        </div>
+        
+        <div class="notes-search">
+            <div class="search-input-wrapper">
+                <input type="text" id="notes-search-input" placeholder="Search notes...">
+                <button id="notes-clear-search" class="icon-button">×</button>
+            </div>
+        </div>
+        
+        <div class="notes-list" id="notes-list">
+            <!-- Notes will be listed here -->
+        </div>
+        
+        <button id="new-note-btn" class="action-button primary">+ New Note</button>
+        
+        <div class="notes-tags-section">
+            <h3>Tags</h3>
+            <div class="tags-list" id="tags-filter-list">
+                <!-- Tags will be listed here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Note Editor Panel -->
+    <div class="note-editor-panel" id="note-editor-panel">
+        <div class="note-editor-header">
+            <button class="back-to-notes" id="back-to-notes">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="note-editor-actions">
+                <div class="view-toggle-group">
+                    <button id="edit-view-btn" class="view-toggle active" title="Edit View (Double-click to toggle Rich Text/Markdown)" style="background-color: var(--accent-primary); color: var(--bg-primary);">
+                        <span class="view-mode-text">Edit</span>
+                        <span class="editor-mode-indicator" style="font-size: 0.8em; opacity: 0.8;"> (Rich Text)</span>
+                    </button>
+                    <button id="split-view-btn" class="view-toggle" title="Split View">Split</button>
+                    <button id="preview-view-btn" class="view-toggle" title="Preview">Preview</button>
+                </div>
+                <button id="enhance-note-btn" class="action-button primary">✨ Enhance</button>
+                <button id="save-note-btn" class="action-button primary">💾 Save</button>
+                <button id="delete-note-btn" class="action-button danger">🗑️ Delete</button>
+            </div>
+        </div>
+        
+        <div class="note-editor">
+            <input type="text" id="note-title-input" placeholder="Note Title">
+            
+            <div class="tags-container">
+                <div class="tags-input-container">
+                    <input type="text" id="tag-input" placeholder="Add tags...">
+                    <button id="add-tag-btn" class="tag-button">+</button>
+                </div>
+                <div class="tags-list" id="note-tags-list">
+                    <!-- Note tags will be listed here -->
+                </div>
+            </div>
+            
+            <div class="markdown-toolbar">
+                <!-- Text Formatting -->
+                <button class="md-tool-btn" data-action="bold" title="Bold (Ctrl+B)"><i class="fas fa-bold"></i></button>
+                <button class="md-tool-btn" data-action="italic" title="Italic (Ctrl+I)"><i class="fas fa-italic"></i></button>
+                <button class="md-tool-btn" data-action="underline" title="Underline (Ctrl+U)"><i class="fas fa-underline"></i></button>
+                <button class="md-tool-btn" data-action="strikethrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+                <span class="md-tool-separator"></span>
+                
+                <!-- Headers -->
+                <select class="md-tool-select" id="heading-select" title="Heading Level">
+                    <option value="">Normal</option>
+                    <option value="h1">Heading 1</option>
+                    <option value="h2">Heading 2</option>
+                    <option value="h3">Heading 3</option>
+                    <option value="h4">Heading 4</option>
+                </select>
+                <span class="md-tool-separator"></span>
+                
+                <!-- Font Options -->
+                <select class="md-tool-select" id="font-size-select" title="Font Size">
+                    <option value="">Size</option>
+                    <option value="12">12pt</option>
+                    <option value="14">14pt</option>
+                    <option value="16">16pt</option>
+                    <option value="18">18pt</option>
+                    <option value="20">20pt</option>
+                    <option value="24">24pt</option>
+                </select>
+                <input type="color" class="md-tool-color" id="text-color" title="Text Color" value="#ffffff">
+                <input type="color" class="md-tool-color" id="highlight-color" title="Highlight Color" value="#ffeb3b">
+                <span class="md-tool-separator"></span>
+                
+                <!-- Alignment -->
+                <button class="md-tool-btn" data-action="align-left" title="Align Left"><i class="fas fa-align-left"></i></button>
+                <button class="md-tool-btn" data-action="align-center" title="Align Center"><i class="fas fa-align-center"></i></button>
+                <button class="md-tool-btn" data-action="align-right" title="Align Right"><i class="fas fa-align-right"></i></button>
+                <button class="md-tool-btn" data-action="align-justify" title="Justify"><i class="fas fa-align-justify"></i></button>
+                <span class="md-tool-separator"></span>
+                
+                <!-- Lists -->
+                <button class="md-tool-btn" data-action="list" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                <button class="md-tool-btn" data-action="numbered-list" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                <button class="md-tool-btn" data-action="indent" title="Increase Indent"><i class="fas fa-indent"></i></button>
+                <button class="md-tool-btn" data-action="outdent" title="Decrease Indent"><i class="fas fa-outdent"></i></button>
+                <span class="md-tool-separator"></span>
+                
+                <!-- Insert -->
+                <button class="md-tool-btn" data-action="link" title="Insert Link"><i class="fas fa-link"></i></button>
+                <button class="md-tool-btn" data-action="image" title="Insert Image"><i class="fas fa-image"></i></button>
+                <button class="md-tool-btn" data-action="table" title="Insert Table"><i class="fas fa-table"></i></button>
+                <button class="md-tool-btn" data-action="code" title="Code Block"><i class="fas fa-code"></i></button>
+                <button class="md-tool-btn" data-action="quote" title="Blockquote"><i class="fas fa-quote-right"></i></button>
+                <span class="md-tool-separator"></span>
+                
+                <!-- Tools -->
+                <button class="md-tool-btn" data-action="undo" title="Undo (Ctrl+Z)"><i class="fas fa-undo"></i></button>
+                <button class="md-tool-btn" data-action="redo" title="Redo (Ctrl+Y)"><i class="fas fa-redo"></i></button>
+                <button class="md-tool-btn" data-action="clear-format" title="Clear Formatting"><i class="fas fa-remove-format"></i></button>
+                <span class="md-tool-separator"></span>
+                
+                <!-- Mode Toggle - Combined with Edit View Button -->
+                <button class="md-tool-btn ai-tools-toggle" title="KYNSEY Assist Tools">✨</button>
+            </div>
+            
+            <div class="ai-tools-panel" id="ai-tools-panel">
+                <h3>KYNSEY Assist Tools</h3>
+                <div class="ai-suggestion-buttons">
+                    <button class="ai-suggestion-btn" data-action="summarize">📝 Summarize</button>
+                    <button class="ai-suggestion-btn" data-action="improve">✨ Improve Writing</button>
+                    <button class="ai-suggestion-btn" data-action="continue">➡️ Continue Writing</button>
+                    <button class="ai-suggestion-btn" data-action="translate">🌎 Translate</button>
+                </div>
+                <div class="ai-custom-prompt">
+                    <input type="text" id="ai-prompt-input" placeholder="Ask KYNSEY anything...">
+                    <button id="ai-prompt-btn">Ask</button>
+                </div>
+                <div class="ai-response-area">
+                    <div class="ai-thinking hidden" id="ai-thinking">
+                        <div class="thinking-container">
+                            <div class="gct-logo-thinking">
+                                <img src="assets/photo_2024-09-24_23-33-17.jpg" alt="GCT Logo" class="thinking-logo">
+                                <div class="logo-glow-overlay"></div>
+                            </div>
+                            <div class="ai-thinking-animation">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <p>KYNSEY is thinking...</p>
+                    </div>
+                    <div id="ai-response" class="hidden">
+                        <!-- KYNSEY responses will appear here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="editor-container">
+                <div class="markdown-editor-pane">
+                    <textarea id="note-content-input" placeholder="Note Content (Markdown supported)"></textarea>
+                </div>
+                
+                <div class="markdown-preview-pane" id="note-content-display">
+                    <!-- Rendered Markdown will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settings-panel">
+        <div class="settings-header">
+            <h2>Settings</h2>
+            <button class="close-settings" id="close-settings">×</button>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Response Style</h3>
+            <div class="radio-option">
+                <input type="radio" id="style-professional" name="response-style" value="professional">
+                <label for="style-professional">Professional</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="style-concise" name="response-style" value="concise">
+                <label for="style-concise">Concise</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="style-normal" name="response-style" value="normal" checked>
+                <label for="style-normal">Normal</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="style-creative" name="response-style" value="creative">
+                <label for="style-creative">Creative</label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Theme</h3>
+            <div class="radio-option">
+                <input type="radio" id="theme-dark" name="theme" value="dark" checked>
+                <label for="theme-dark">Dark</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="theme-light" name="theme" value="light">
+                <label for="theme-light">Light</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="theme-high-contrast" name="theme" value="high-contrast">
+                <label for="theme-high-contrast">High Contrast</label>
+            </div>
+        </div>
+
+        <!-- Advanced Settings: Font Size & AI Personality -->
+        <div class="settings-section" id="font-size-section">
+            <h3>Font Size</h3>
+            <div class="setting-item" style="display: flex; align-items: center; gap: 10px;">
+                <label for="font-size-range" style="flex:1;">Font Size</label>
+                <input type="range" id="font-size-range" min="14" max="22" step="1" value="16" style="flex:2;">
+                <span id="font-size-value" style="width:32px; text-align:right;">16px</span>
+            </div>
+        </div>
+        <div class="settings-section" id="ai-personality-section">
+            <h3>AI Personality</h3>
+            <div class="radio-option">
+                <input type="radio" id="personality-professional" name="ai-personality" value="professional" checked>
+                <label for="personality-professional">Professional</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="personality-friendly" name="ai-personality" value="friendly">
+                <label for="personality-friendly">Friendly</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="personality-creative" name="ai-personality" value="creative">
+                <label for="personality-creative">Creative</label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Features</h3>
+            <div class="checkbox-option">
+                <input type="checkbox" id="smart-suggestions" checked>
+                <label for="smart-suggestions">Show Smart Suggestions</label>
+            </div>
+        </div>
+
+        <!-- Enhanced Settings Panel additions -->
+        <!-- Add these options to your existing settings panel -->
+        <div class="settings-section">
+            <h3>Enhanced Features</h3>
+            <div class="checkbox-option">
+                <input type="checkbox" id="message-reactions" checked>
+                <label for="message-reactions">Message Reactions</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="keyboard-shortcuts" checked>
+                <label for="keyboard-shortcuts">Keyboard Shortcuts</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="voice-output" unchecked>
+                <label for="voice-output">Voice Output</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="streaming-mode" unchecked>
+                <label for="streaming-mode">Streaming Responses</label>
+            </div>
+            <div class="checkbox-option">
+                <input type="checkbox" id="code-execution" unchecked>
+                <label for="code-execution">Enable Code Execution (JS only)</label>
+            </div>
+        </div>
+        <div class="settings-section">
+            <h3>Voice Settings</h3>
+            <div class="setting-item">
+                <label for="voice-select">Voice</label>
+                <select id="voice-select" class="voice-select">
+                    <!-- Options will be populated by JS -->
+                </select>
+            </div>
+            <div class="setting-item">
+                <label for="voice-speed">Speed</label>
+                <input type="range" id="voice-speed" min="0.5" max="2" step="0.1" value="1">
+                <span id="voice-speed-value">1.0x</span>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Active Model</h3>
+            <div class="model-info">
+                <div class="model-display">llama-3.2-3b-instruct</div>
+                <div id="model-status-indicator" class="status-indicator loading" title="Checking model status..."></div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Conversation History</h3>
+            <button class="action-button danger" id="clear-history">Clear Conversation History</button>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Admin</h3>
+            <button class="action-button neutral" id="admin-panel" onclick="if(window.openAdminPanel) window.openAdminPanel(); return false;">Go to Admin Panel</button>
+        </div>
+    </div>
+    
+    <!-- Analytics Panel -->
+    <div class="analytics-panel" id="analytics-panel">
+        <div class="analytics-header">
+            <h2>Analytics</h2>
+            <button class="close-analytics" id="close-analytics">×</button>
+        </div>
+        
+        <div class="analytics-content">
+            <!-- Quick Insights Dashboard -->
+            <div class="analytics-quick-insights">
+                <h3>Quick Insights</h3>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="insight-value">+15%</div>
+                        <div class="insight-label">Revenue Growth</div>
+                        <div class="insight-sparkline" id="revenue-sparkline"></div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="fas fa-users"></i></div>
+                        <div class="insight-value">2,543</div>
+                        <div class="insight-label">Active Users</div>
+                        <div class="insight-sparkline" id="users-sparkline"></div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="insight-value">87%</div>
+                        <div class="insight-label">Conversion Rate</div>
+                        <div class="insight-sparkline" id="conversion-sparkline"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Insight of the Day -->
+            <div class="analytics-insight-day">
+                <h4><i class="fas fa-lightbulb"></i> Insight of the Day</h4>
+                <div class="insight-day-content">
+                    <p>Your Q2 revenue is trending 23% above forecast. North American markets show strongest growth.</p>
+                    <button class="explore-more-btn">Explore More →</button>
+                </div>
+            </div>
+            
+            <!-- Recent Analysis History -->
+            <div class="analytics-recent">
+                <h4>Recent Analysis</h4>
+                <div class="recent-list">
+                    <div class="recent-item">
+                        <div class="recent-icon"><i class="fas fa-file-excel"></i></div>
+                        <div class="recent-details">
+                            <div class="recent-title">Q2 Sales Report</div>
+                            <div class="recent-time">2 hours ago</div>
+                        </div>
+                        <div class="recent-action"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                    <div class="recent-item">
+                        <div class="recent-icon"><i class="fas fa-file-pdf"></i></div>
+                        <div class="recent-details">
+                            <div class="recent-title">P&L Analysis</div>
+                            <div class="recent-time">Yesterday</div>
+                        </div>
+                        <div class="recent-action"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Upload Widget -->
+            <div class="analytics-quick-upload">
+                <h4>Quick Analysis</h4>
+                <div class="quick-upload-area">
+                    <button class="quick-upload-btn" id="quick-upload-btn">
+                        <i class="fas fa-plus"></i> Upload Data
+                    </button>
+                    <div class="data-sources">
+                        <div class="data-source active">
+                            <i class="fas fa-database"></i>
+                            <span>Sales DB</span>
+                            <div class="status-dot active"></div>
+                        </div>
+                        <div class="data-source">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Q2 Report</span>
+                            <div class="status-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <input type="file" id="analytics-file-input" accept=".xlsx,.xls,.csv,.pdf" multiple style="display: none;">
+            </div>
+            
+            <!-- Enhanced Chat Interface -->
+            <div class="analytics-chat-section">
+                <h4>Ask KYNSEY</h4>
+                <div class="suggested-queries">
+                    <button class="suggested-query">What's driving revenue growth?</button>
+                    <button class="suggested-query">Show me customer trends</button>
+                    <button class="suggested-query">Forecast next month</button>
+                </div>
+                <div class="chat-messages" id="analytics-chat-messages">
+                    <!-- Chat messages will appear here -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="analytics-query-input" placeholder="Ask about your data...">
+                    <button id="analytics-voice-btn" class="voice-btn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="analytics-query-btn" class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Open Full Suite CTA -->
+            <div class="analytics-suite-cta">
+                <button class="open-suite-btn" id="open-analytics-suite">
+                    <i class="fas fa-expand"></i> Open Analytics Suite
+                </button>
+            </div>
+            
+            <div class="analytics-results-section" id="analytics-results" style="display: none;">
+                <h3>Analysis Results</h3>
+                <div class="results-container">
+                    <!-- Results will be displayed here -->
+                </div>
+            </div>
+            
+            <div class="analytics-visualizations" id="analytics-visualizations" style="display: none;">
+                <h3>Data Visualizations</h3>
+                <div class="chart-container">
+                    <canvas id="analytics-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="analytics-export-section" style="display: none;">
+                <button class="action-button secondary" id="export-results-btn">
+                    <i class="fas fa-download"></i> Export Results
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Browser Control Panel -->
+    <div class="browser-control-panel" id="browser-control-panel">
+        <div class="browser-control-header">
+            <h2>Browser Control</h2>
+            <button class="close-browser-control" id="close-browser-control">×</button>
+        </div>
+        
+        <div class="browser-control-content">
+            <!-- URL Input Section -->
+            <div class="browser-url-section">
+                <h3>Navigate</h3>
+                <div class="url-input-group">
+                    <input type="text" id="browser-url-input" placeholder="Enter URL..." value="https://google.com">
+                    <button id="browser-launch-btn" class="action-button primary">
+                        <i class="fas fa-play"></i> Launch
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="browser-actions-section">
+                <h3>Actions</h3>
+                <div class="action-buttons-grid">
+                    <button id="browser-click-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-mouse-pointer"></i>
+                        <span>Click</span>
+                    </button>
+                    <button id="browser-type-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-keyboard"></i>
+                        <span>Type</span>
+                    </button>
+                    <button id="browser-scroll-up-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Scroll Up</span>
+                    </button>
+                    <button id="browser-scroll-down-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Scroll Down</span>
+                    </button>
+                    <button id="browser-screenshot-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-camera"></i>
+                        <span>Screenshot</span>
+                    </button>
+                    <button id="browser-close-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-times-circle"></i>
+                        <span>Close</span>
+                    </button>
+                    <button id="browser-detect-forms-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-wpforms"></i>
+                        <span>Forms</span>
+                    </button>
+                    <button id="browser-detect-elements-btn" class="browser-action-btn" disabled>
+                        <i class="fas fa-mouse"></i>
+                        <span>Elements</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Form Auto-fill Section -->
+            <div class="browser-forms-section" id="browser-forms-section" style="display: none;">
+                <h3>Detected Forms</h3>
+                <div id="browser-forms-list" class="forms-list" style="max-height: 200px; overflow-y: auto; background: #2a2a2a; border-radius: 4px; padding: 10px;">
+                    <p style="color: #999;">Click "Forms" button to detect form fields</p>
+                </div>
+            </div>
+            
+            <!-- Browser Preview -->
+            <div class="browser-preview-section">
+                <h3>Preview</h3>
+                <div class="preview-controls">
+                    <button id="browser-zoom-out" class="zoom-btn">
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <button id="browser-zoom-reset" class="zoom-btn">
+                        <i class="fas fa-compress"></i>
+                    </button>
+                    <button id="browser-zoom-in" class="zoom-btn">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                    <span class="coordinate-display" id="browser-coordinate-display">0, 0</span>
+                </div>
+                <div class="browser-preview-container" id="browser-preview-container">
+                    <img id="browser-preview-image" class="browser-preview-image" style="display: none;" alt="Browser Preview">
+                    <div class="preview-placeholder">
+                        <i class="fas fa-globe"></i>
+                        <p>Launch a browser to see preview</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Session Info -->
+            <div class="browser-session-section">
+                <h3>Session</h3>
+                <div id="browser-session-info" class="session-info">
+                    <p>No active session</p>
+                </div>
+                <div style="margin-top: 10px;">
+                    <label style="display: flex; align-items: center; gap: 10px; color: #e8e8e8;">
+                        <input type="checkbox" id="browser-llm-toggle" style="cursor: pointer;">
+                        <span>Enable AI Features (LM Studio)</span>
+                    </label>
+                    <button id="browser-test-llm" class="action-button" style="margin-top: 5px; padding: 5px 10px; font-size: 12px;">
+                        Test LLM Connection
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Console Output -->
+            <div class="browser-console-section">
+                <h3>Console</h3>
+                <div class="console-controls" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="browser-console-filter" placeholder="Filter console..." style="flex: 1; padding: 5px; background: #2a2a2a; border: 1px solid #444; color: #e8e8e8; border-radius: 4px;">
+                    <select id="browser-console-type-filter" style="padding: 5px; background: #2a2a2a; border: 1px solid #444; color: #e8e8e8; border-radius: 4px;">
+                        <option value="all">All Types</option>
+                        <option value="info">Info</option>
+                        <option value="success">Success</option>
+                        <option value="error">Error</option>
+                        <option value="warning">Warning</option>
+                    </select>
+                    <button id="browser-console-clear" class="action-button" style="padding: 5px 10px;">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                    <button id="browser-console-export" class="action-button" style="padding: 5px 10px;">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+                <div id="browser-console-output" class="console-output"></div>
+            </div>
+            
+            <!-- Action History -->
+            <div class="browser-history-section">
+                <h3>History</h3>
+                <div id="browser-action-history" class="action-history"></div>
+            </div>
+            
+            <!-- Quick Commands -->
+            <div class="browser-commands-section">
+                <h3>Quick Commands</h3>
+                <div class="command-examples">
+                    <code>/browse https://example.com</code>
+                    <code>/click 450 300</code>
+                    <code>/type Hello World</code>
+                    <code>/screenshot</code>
+                </div>
+                <h3 style="margin-top: 15px;">Keyboard Shortcuts</h3>
+                <div class="command-examples" style="font-size: 12px;">
+                    <div><kbd>Ctrl</kbd>+<kbd>B</kbd> - Open Browser Control</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> - Screenshot</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> - Scroll Down</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>W</kbd> - Scroll Up</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>+</kbd> - Zoom In</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>-</kbd> - Zoom Out</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>0</kbd> - Reset Zoom</div>
+                    <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> - Close Browser</div>
+                </div>
+            </div>
+            
+            <!-- Open Full Suite CTA -->
+            <div class="browser-suite-cta">
+                <button class="open-suite-btn" id="open-browser-suite">
+                    <i class="fas fa-expand"></i> Open Browser Suite
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Browser Suite Modal -->
+    <div class="browser-suite-modal" id="browser-suite-modal">
+        <div class="suite-header">
+            <div class="suite-header-left">
+                <button class="back-to-panel" id="browser-back-to-panel">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Browser Suite</h2>
+                <div class="view-mode-selector">
+                    <button class="browser-view-mode-btn active" data-mode="control">
+                        <i class="fas fa-globe"></i> Control
+                    </button>
+                    <button class="browser-view-mode-btn" data-mode="automation">
+                        <i class="fas fa-robot"></i> Automation
+                    </button>
+                    <button class="browser-view-mode-btn" data-mode="developer">
+                        <i class="fas fa-code"></i> Developer
+                    </button>
+                </div>
+            </div>
+            <div class="suite-header-right">
+                <span id="browser-suite-url" class="suite-url-display">No active session</span>
+                <span id="browser-suite-status" class="suite-status"></span>
+                <button class="suite-action-btn" id="browser-suite-share">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button class="suite-action-btn" id="browser-suite-export">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="suite-action-btn" id="browser-suite-settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="close-suite" id="close-browser-suite">×</button>
+            </div>
+        </div>
+        
+        <div class="suite-content">
+            <!-- Left Panel: Actions & Tools -->
+            <div class="suite-panel browser-actions-panel" id="browser-actions-panel">
+                <div class="panel-header">
+                    <h3>Actions & Tools</h3>
+                    <button class="browser-panel-toggle" data-panel="browser-actions-panel">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                <div class="panel-content">
+                    <!-- Control View -->
+                    <div id="browser-control-view" class="browser-view active">
+                        <div class="action-section">
+                            <h4>Quick Actions</h4>
+                            <div class="quick-actions-grid">
+                                <button class="quick-action-btn" data-action="navigate">
+                                    <i class="fas fa-compass"></i>
+                                    <span>Navigate</span>
+                                </button>
+                                <button class="quick-action-btn" data-action="refresh">
+                                    <i class="fas fa-sync"></i>
+                                    <span>Refresh</span>
+                                </button>
+                                <button class="quick-action-btn" data-action="back">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Back</span>
+                                </button>
+                                <button class="quick-action-btn" data-action="forward">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>Forward</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="action-section">
+                            <h4>Page Interaction</h4>
+                            <button id="browser-coord-picker" class="action-tool-btn">
+                                <i class="fas fa-crosshairs"></i> Coordinate Picker
+                            </button>
+                            <button id="browser-element-selector" class="action-tool-btn">
+                                <i class="fas fa-mouse-pointer"></i> Element Selector
+                            </button>
+                            <button id="browser-text-extractor" class="action-tool-btn">
+                                <i class="fas fa-text-height"></i> Text Extractor
+                            </button>
+                        </div>
+                        
+                        <div class="action-section">
+                            <h4>Form Filling</h4>
+                            <div class="form-fill-controls">
+                                <input type="text" placeholder="Field selector" id="form-field-selector">
+                                <input type="text" placeholder="Value to fill" id="form-field-value">
+                                <button class="action-btn">Fill Field</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Automation View -->
+                    <div id="browser-automation-view" class="browser-view">
+                        <div class="automation-controls">
+                            <h4>Recording</h4>
+                            <div class="recording-controls">
+                                <button id="browser-suite-record" class="record-btn">
+                                    <i class="fas fa-circle"></i> Record
+                                </button>
+                                <button id="browser-suite-play" class="play-btn">
+                                    <i class="fas fa-play"></i> Play
+                                </button>
+                                <button id="browser-suite-save-macro" class="save-btn">
+                                    <i class="fas fa-save"></i> Save as Macro
+                                </button>
+                            </div>
+                            <div id="browser-recording-display" class="recording-display"></div>
+                        </div>
+                        
+                        <div class="macros-section">
+                            <h4>Saved Macros</h4>
+                            <div id="browser-macros-list" class="macros-list">
+                                <!-- Macros will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Developer View -->
+                    <div id="browser-developer-view" class="browser-view">
+                        <div class="developer-tools">
+                            <h4>Browser Console</h4>
+                            <div id="browser-dev-console" class="dev-console"></div>
+                            
+                            <h4>Network Activity</h4>
+                            <div id="browser-network-monitor" class="network-monitor"></div>
+                            
+                            <h4>Page Info</h4>
+                            <div id="browser-page-info" class="page-info"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center: Browser Preview -->
+            <div class="suite-panel browser-preview-panel" id="browser-preview-panel">
+                <div class="preview-toolbar">
+                    <div class="url-bar">
+                        <button class="url-action" id="browser-suite-back">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="url-action" id="browser-suite-forward">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="url-action" id="browser-suite-refresh">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <input type="text" id="browser-suite-url-input" class="suite-url-input" placeholder="Enter URL...">
+                        <button class="url-action primary" id="browser-suite-go">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="preview-controls">
+                        <button id="browser-zoom-out-suite" class="zoom-btn">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <span id="browser-zoom-display" class="zoom-display">100%</span>
+                        <button id="browser-zoom-in-suite" class="zoom-btn">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button id="browser-zoom-reset-suite" class="zoom-btn">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                        <span id="browser-coord-display" class="coord-display">0, 0</span>
+                    </div>
+                </div>
+                
+                <div class="browser-viewport">
+                    <img id="browser-suite-preview" class="browser-preview-image" alt="Browser Preview">
+                    <div class="preview-overlay" id="browser-preview-overlay"></div>
+                </div>
+                
+                <div class="browser-status-bar">
+                    <span id="browser-page-title"></span>
+                    <span id="browser-page-status"></span>
+                </div>
+            </div>
+            
+            <!-- Right Panel: DevTools & Info -->
+            <div class="suite-panel browser-devtools-panel collapsed" id="browser-devtools-panel">
+                <div class="panel-header">
+                    <h3>DevTools & Info</h3>
+                    <button class="browser-panel-toggle" data-panel="browser-devtools-panel">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="panel-content">
+                    <div class="panel-tabs">
+                        <button class="browser-panel-tab active" data-tab="elements">Elements</button>
+                        <button class="browser-panel-tab" data-tab="console">Console</button>
+                        <button class="browser-panel-tab" data-tab="network">Network</button>
+                        <button class="browser-panel-tab" data-tab="storage">Storage</button>
+                    </div>
+                    
+                    <div class="browser-tab-content active" id="browser-elements-tab">
+                        <div class="elements-tree">
+                            <!-- DOM tree will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="browser-tab-content" id="browser-console-tab">
+                        <div class="console-output">
+                            <!-- Console logs will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="browser-tab-content" id="browser-network-tab">
+                        <div class="network-requests">
+                            <!-- Network requests will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="browser-tab-content" id="browser-storage-tab">
+                        <div class="storage-info">
+                            <!-- Storage info will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="header-top">
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-item active" id="chat-nav">
+                    <i class="fas fa-comment"></i>
+                </div>
+                <div class="nav-item" id="notes-nav">
+                    <i class="fas fa-sticky-note"></i>
+                </div>
+                <div class="nav-item" id="settings-nav">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="nav-item" id="analytics-nav">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="nav-item" id="browser-nav">
+                    <i class="fas fa-globe"></i>
+                </div>
+            </div>
+            <div class="sidebar-avatar">
+                <div class="avatar">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="main-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <img src="assets/photo_2024-09-24_23-33-17.jpg" alt="GCT Logo" class="logo-image">
+                        <div class="logo-text">
+                            <h2>GCT UI</h2>
+                            <p>Green Chip Technology</p>
+                        </div>
+                    </div>
+                    <div class="system-status">
+                        <div id="api-status-indicator" class="status-indicator" title="API Connection Status"></div>
+                        <div id="model-status-header" class="status-indicator" title="Model Status"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-container">
+                <div class="messages" id="messages">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+                <!-- KYNSEY Thinking Animation -->
+                <div class="kynsey-thinking hidden" id="kynsey-thinking">
+                    <div class="thinking-container">
+                        <div class="gct-logo-thinking">
+                            <img src="assets/photo_2024-09-24_23-33-17.jpg" alt="GCT Logo" class="thinking-logo">
+                            <div class="logo-glow-overlay"></div>
+                        </div>
+                        <div class="ai-thinking-animation">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <p>KYNSEY is thinking...</p>
+                </div>
+                <div class="input-area">
+                    <div class="input-container">
+                        <button class="attachment-btn">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button id="voice-input-btn" class="voice-input-btn" title="Voice input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <input type="text" id="message-input" placeholder="Type a message or / for commands..." />
+                        <button id="send-btn" class="send-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Analytics Suite Modal -->
+    <div class="analytics-suite-modal" id="analytics-suite-modal">
+        <div class="suite-header">
+            <div class="suite-header-left">
+                <button class="back-to-panel" id="back-to-panel">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Analytics Suite</h2>
+                <div class="view-mode-selector">
+                    <button class="view-mode-btn active" data-mode="dashboard">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </button>
+                    <button class="view-mode-btn" data-mode="analysis">
+                        <i class="fas fa-chart-line"></i> Analysis
+                    </button>
+                    <button class="view-mode-btn" data-mode="report">
+                        <i class="fas fa-file-alt"></i> Report
+                    </button>
+                </div>
+            </div>
+            <div class="suite-header-right">
+                <button class="suite-action-btn" id="suite-share-btn">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button class="suite-action-btn" id="suite-export-btn">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="suite-action-btn" id="suite-settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="close-suite" id="close-suite">×</button>
+            </div>
+        </div>
+        
+        <div class="suite-content">
+            <!-- Left Panel: Data Explorer -->
+            <div class="suite-panel data-explorer" id="data-explorer">
+                <div class="panel-header">
+                    <h3>Data Explorer</h3>
+                    <button class="panel-toggle" data-panel="data-explorer">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                <div class="panel-content">
+                    <div class="data-sources-list">
+                        <h4>Data Sources</h4>
+                        <div class="source-item active">
+                            <i class="fas fa-database"></i>
+                            <span>Sales Database</span>
+                            <button class="source-action"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                        <div class="source-item">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Q2 Financial Report</span>
+                            <button class="source-action"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                        <button class="add-source-btn">
+                            <i class="fas fa-plus"></i> Add Data Source
+                        </button>
+                    </div>
+                    
+                    <div class="data-fields">
+                        <h4>Available Fields</h4>
+                        <div class="field-search">
+                            <input type="text" placeholder="Search fields...">
+                        </div>
+                        <div class="fields-list">
+                            <div class="field-item" draggable="true">
+                                <i class="fas fa-hashtag"></i> Revenue
+                            </div>
+                            <div class="field-item" draggable="true">
+                                <i class="fas fa-calendar"></i> Date
+                            </div>
+                            <div class="field-item" draggable="true">
+                                <i class="fas fa-map-marker-alt"></i> Region
+                            </div>
+                            <div class="field-item" draggable="true">
+                                <i class="fas fa-tag"></i> Product Category
+                            </div>
+                            <div class="field-item" draggable="true">
+                                <i class="fas fa-users"></i> Customer Segment
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center: Visualization Canvas -->
+            <div class="suite-panel visualization-canvas" id="visualization-canvas">
+                <div class="canvas-toolbar">
+                    <div class="chart-type-selector">
+                        <button class="chart-type-btn active" data-type="line">
+                            <i class="fas fa-chart-line"></i>
+                        </button>
+                        <button class="chart-type-btn" data-type="bar">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
+                        <button class="chart-type-btn" data-type="pie">
+                            <i class="fas fa-chart-pie"></i>
+                        </button>
+                        <button class="chart-type-btn" data-type="scatter">
+                            <i class="fas fa-braille"></i>
+                        </button>
+                        <button class="chart-type-btn" data-type="area">
+                            <i class="fas fa-chart-area"></i>
+                        </button>
+                    </div>
+                    <div class="canvas-actions">
+                        <button class="canvas-action-btn" id="add-visualization">
+                            <i class="fas fa-plus"></i> Add Chart
+                        </button>
+                        <button class="canvas-action-btn" id="clear-canvas">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid" id="dashboard-grid">
+                    <!-- Visualization widgets will be added here -->
+                    <div class="viz-widget" data-widget-id="1">
+                        <div class="widget-header">
+                            <h4>Revenue Trend</h4>
+                            <div class="widget-actions">
+                                <button class="widget-action"><i class="fas fa-expand"></i></button>
+                                <button class="widget-action"><i class="fas fa-cog"></i></button>
+                                <button class="widget-action"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <canvas id="suite-chart-1"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="drop-zone" id="viz-drop-zone" style="display: none;">
+                    <i class="fas fa-chart-bar"></i>
+                    <p>Drop fields here to create visualization</p>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Insights & Configuration -->
+            <div class="suite-panel insights-panel" id="insights-panel">
+                <div class="panel-header">
+                    <h3>Insights & Configuration</h3>
+                    <button class="panel-toggle" data-panel="insights-panel">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="panel-content">
+                    <div class="panel-tabs">
+                        <button class="panel-tab active" data-tab="insights">Insights</button>
+                        <button class="panel-tab" data-tab="filters">Filters</button>
+                        <button class="panel-tab" data-tab="config">Config</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="insights-tab">
+                        <div class="ai-insights">
+                            <h4>AI-Powered Insights</h4>
+                            <div class="insight-item">
+                                <i class="fas fa-lightbulb"></i>
+                                <p>Revenue increased by 23% in Q2, driven primarily by North American markets.</p>
+                            </div>
+                            <div class="insight-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Anomaly detected: Unusual spike in returns for Product Category A.</p>
+                            </div>
+                            <button class="generate-insights-btn">
+                                <i class="fas fa-magic"></i> Generate More Insights
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="filters-tab">
+                        <div class="filters-section">
+                            <h4>Active Filters</h4>
+                            <div class="filter-item">
+                                <span>Date Range: Last 90 days</span>
+                                <button class="remove-filter">×</button>
+                            </div>
+                            <div class="filter-controls">
+                                <label>Date Range</label>
+                                <input type="date" id="filter-start-date">
+                                <input type="date" id="filter-end-date">
+                                <button class="apply-filter-btn">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="config-tab">
+                        <div class="config-section">
+                            <h4>Chart Configuration</h4>
+                            <div class="config-item">
+                                <label>Chart Title</label>
+                                <input type="text" id="chart-title" placeholder="Enter title...">
+                            </div>
+                            <div class="config-item">
+                                <label>Y-Axis Label</label>
+                                <input type="text" id="y-axis-label" placeholder="Y-axis label...">
+                            </div>
+                            <div class="config-item">
+                                <label>Color Scheme</label>
+                                <select id="color-scheme">
+                                    <option>Default</option>
+                                    <option>Ocean</option>
+                                    <option>Forest</option>
+                                    <option>Sunset</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="suite-footer">
+            <div class="footer-left">
+                <span class="data-status">
+                    <i class="fas fa-database"></i> 2 data sources connected
+                </span>
+                <span class="last-refresh">
+                    <i class="fas fa-sync"></i> Last refresh: 2 minutes ago
+                </span>
+            </div>
+            <div class="footer-right">
+                <button class="refresh-data-btn">
+                    <i class="fas fa-sync"></i> Refresh Data
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Upload Modal -->
+    <div class="image-upload-modal" id="image-upload-modal">
+        <div class="image-upload-content">
+            <div class="image-upload-header">
+                <h2>Upload Image</h2>
+                <button class="close-modal" id="close-image-upload">×</button>
+            </div>
+            <div class="image-upload-body">
+                <div class="upload-area" id="upload-area">
+                    <p>Drag & drop an image or click to browse</p>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            <div class="image-upload-footer">
+                <button class="cancel-btn" id="cancel-upload">Cancel</button>
+                <button class="upload-btn" id="confirm-upload">Upload</button>
+            </div>
+        </div>
+    </div>
+    <!-- End of body -->
+    <!-- Smart Typing Indicator Overlay -->
+    <kynsey-typing-indicator id="kynseyIndicator"></kynsey-typing-indicator>
+    <script src="kynsey-typing-indicator.js"></script>
+
+    <!-- Command Palette (add before closing body tag) -->
+<!-- Keyboard Shortcuts Help Overlay -->
+<div id="shortcuts-help-overlay" class="shortcuts-help-overlay" tabindex="-1" aria-modal="true" role="dialog" aria-label="Keyboard Shortcuts Help" style="display:none;">
+  <div class="shortcuts-help-content" role="document">
+    <div class="shortcuts-help-header">
+      <h2>Keyboard Shortcuts</h2>
+      <button id="close-shortcuts-help" class="close-shortcuts-help" aria-label="Close help overlay">&times;</button>
+    </div>
+    <div class="shortcuts-help-list" id="shortcuts-help-list">
+      <!-- Shortcuts will be populated by JS -->
+    </div>
+    <div class="shortcuts-help-footer">
+      <span>Press <kbd>Esc</kbd> or <kbd>Ctrl</kbd>+<kbd>?</kbd> to close</span>
+    </div>
+  </div>
+</div>
+    <div id="command-palette" class="command-palette"></div>
+
+    <!-- Enhanced Message Search (add before closing body tag) -->
+    <div id="message-search" class="message-search">
+        <div class="search-header">
+            <input type="text" id="message-search-input" placeholder="Search messages..." />
+            <div class="search-controls">
+                <button id="search-prev" class="search-nav-btn">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+                <button id="search-next" class="search-nav-btn">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <button id="close-search" class="search-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div id="search-results-count" class="search-results-count"></div>
+    </div>
+
+    <!-- Share Indicator -->
+    <div id="share-indicator" class="share-indicator">
+        <i class="fas fa-share-alt"></i>
+        <span>Sharing active</span>
+    </div>
+</body>
+</html>
