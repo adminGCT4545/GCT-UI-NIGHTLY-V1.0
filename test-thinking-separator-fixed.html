@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thinking Separator Test - Fixed Version</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #1a1b26;
+            color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        #messages {
+            background: #23243a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+        
+        .message {
+            background: #2d2e48;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #5eead4;
+        }
+        
+        .ai-message {
+            background: #2d2e48;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #5eead4;
+        }
+        
+        .message-content {
+            line-height: 1.6;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #5eead4;
+            color: #1a1b26;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #3dd8c3;
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #settings-content {
+            background: #23243a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: #5eead4;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .slider.round {
+            border-radius: 34px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        .status {
+            background: #23243a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .status-line {
+            margin: 5px 0;
+        }
+        
+        .status-ok {
+            color: #5eead4;
+        }
+        
+        .status-error {
+            color: #ff6b6b;
+        }
+        
+        .debug-panel {
+            background: #1a1b26;
+            border: 1px solid #5eead4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .debug-panel h3 {
+            color: #5eead4;
+            margin-top: 0;
+        }
+        
+        pre {
+            background: #2d2e48;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Thinking Separator Test - Fixed Version</h1>
+    
+    <div class="status" id="status">
+        <div class="status-line">Loading status...</div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="addTestMessage1()">Add Message with &lt;thinking&gt; Tags</button>
+        <button onclick="addTestMessage2()">Add Message with Alt Format</button>
+        <button onclick="addTestMessage3()">Add Complex Message</button>
+        <button onclick="clearMessages()">Clear Messages</button>
+        <button onclick="debugExisting()">Debug Process Existing</button>
+        <button onclick="toggleDebugPanel()">Toggle Debug Panel</button>
+    </div>
+    
+    <div id="settings-content">
+        <!-- Settings will be injected here -->
+    </div>
+    
+    <div id="messages">
+        <!-- Messages will appear here -->
+    </div>
+    
+    <div class="debug-panel" id="debugPanel" style="display: none;">
+        <h3>Debug Console</h3>
+        <div id="debugContent"></div>
+    </div>
+    
+    <!-- Load dependencies -->
+    <script src="js/marked.min.js"></script>
+    <script src="js/purify.min.js"></script>
+    
+    <!-- Load the fixed thinking separator -->
+    <script src="thinking-separator-fixed.js"></script>
+    
+    <script>
+        let messageCounter = 0;
+        const debugLog = [];
+        
+        // Intercept console.log for debugging
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            debugLog.push({
+                time: new Date().toLocaleTimeString(),
+                message: args.join(' ')
+            });
+            updateDebugPanel();
+        };
+        
+        function updateStatus() {
+            const statusEl = document.getElementById('status');
+            const checks = [
+                {
+                    name: 'marked.js loaded',
+                    check: () => typeof marked !== 'undefined'
+                },
+                {
+                    name: 'DOMPurify loaded',
+                    check: () => typeof DOMPurify !== 'undefined'
+                },
+                {
+                    name: 'Thinking separator loaded',
+                    check: () => typeof window.debugProcessExistingMessages === 'function'
+                },
+                {
+                    name: 'addAIMessage function',
+                    check: () => typeof window.addAIMessage === 'function'
+                }
+            ];
+            
+            statusEl.innerHTML = checks.map(check => {
+                const passed = check.check();
+                return `<div class="status-line ${passed ? 'status-ok' : 'status-error'}">
+                    ${passed ? '✓' : '✗'} ${check.name}
+                </div>`;
+            }).join('');
+        }
+        
+        function updateDebugPanel() {
+            const debugContent = document.getElementById('debugContent');
+            const recentLogs = debugLog.slice(-20); // Show last 20 logs
+            
+            debugContent.innerHTML = recentLogs.map(log => 
+                `<div><span style="color: #5eead4">[${log.time}]</span> ${escapeHtml(log.message)}</div>`
+            ).join('');
+            
+            debugContent.scrollTop = debugContent.scrollHeight;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Mock addAIMessage function if it doesn't exist
+        if (typeof window.addAIMessage === 'undefined') {
+            window.addAIMessage = function(content, suggestions) {
+                console.log('Mock addAIMessage called with:', content.substring(0, 100) + '...');
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'ai-message';
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        ${marked ? DOMPurify.sanitize(marked.parse(content)) : content}
+                    </div>
+                `;
+                
+                document.getElementById('messages').appendChild(messageDiv);
+            };
+        }
+        
+        function addTestMessage1() {
+            const content = `<thinking>
+Let me analyze this request step by step:
+1. First, I need to understand the context
+2. Then, I'll formulate a response
+3. Finally, I'll provide a clear answer
+
+This is my internal reasoning process that helps me arrive at the answer.
+</thinking>
+
+Here's my response to your question. This is the actual answer that the user will see. The thinking process above has been separated and hidden in a collapsible section.`;
+            
+            window.addAIMessage(content);
+            messageCounter++;
+        }
+        
+        function addTestMessage2() {
+            const content = `Thinking: Let me consider the various aspects of this problem:
+- Point 1: Important consideration
+- Point 2: Another factor to consider
+- Point 3: Final thought
+
+Based on my analysis above, here's the solution to your problem. This part is the actual answer.`;
+            
+            window.addAIMessage(content);
+            messageCounter++;
+        }
+        
+        function addTestMessage3() {
+            const content = `<thinking>
+This is a complex reasoning process with multiple parts:
+
+## Part 1: Analysis
+I need to break down the problem into smaller components.
+
+## Part 2: Evaluation
+Let me evaluate each component:
+- Component A: Good
+- Component B: Needs improvement
+- Component C: Excellent
+
+## Part 3: Synthesis
+Combining all the insights from above...
+</thinking>
+
+# Final Answer
+
+Based on my comprehensive analysis, here's what I recommend:
+
+1. **First recommendation**: Do this important thing
+2. **Second recommendation**: Consider this approach
+3. **Third recommendation**: Don't forget about this
+
+<thinking>
+Oh wait, I just realized something else important about this problem. Let me add this additional consideration.
+</thinking>
+
+Additionally, you should also keep in mind this final point that emerged from further reflection.`;
+            
+            window.addAIMessage(content);
+            messageCounter++;
+        }
+        
+        function clearMessages() {
+            document.getElementById('messages').innerHTML = '';
+            messageCounter = 0;
+            console.log('Messages cleared');
+        }
+        
+        function debugExisting() {
+            if (typeof window.debugProcessExistingMessages === 'function') {
+                window.debugProcessExistingMessages();
+            } else {
+                console.error('debugProcessExistingMessages function not found');
+            }
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            updateStatus();
+            console.log('Test page loaded successfully');
+            
+            // Add initial test message
+            setTimeout(() => {
+                console.log('Adding initial test message...');
+                addTestMessage1();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

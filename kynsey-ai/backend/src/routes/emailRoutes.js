@@ -15,7 +15,7 @@ const router = express.Router();
 router.post('/draft', async (req, res) => {
     try {
         const { to, subject, content, style } = req.body;
-        const activeModel = req.app.get('activeModel') || 'llama3.2:3b-instruct-fp16'; // Get from app context
+        const activeModel = req.app.get('activeModel') || '30b-a3b'; // Get from app context
         
         if (!content) {
             return res.status(400).json({ 

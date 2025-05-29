@@ -7,7 +7,7 @@
     // Configuration
     const BROWSER_SERVER_URL = 'http://localhost:3456';
     const LLM_API_URL = 'http://192.168.1.7:4545';
-    const LLM_MODEL = 'llama-3.2-3b-instruct';
+    const LLM_MODEL = '30b-a3b';
     let sessionActive = false;
     let sessionId = null;
     let panelInitialized = false;

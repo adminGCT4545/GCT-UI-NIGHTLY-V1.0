@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Thinking Separator</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 2rem;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #5eead4;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section {
+            background: #23243a;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .test-button {
+            background: #5eead4;
+            color: #1a1a1a;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .test-button:hover {
+            background: #38bdf8;
+            transform: translateY(-1px);
+        }
+        
+        #messages {
+            background: #2a2b3d;
+            min-height: 400px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .message {
+            background: #1e1f2e;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .message-content {
+            line-height: 1.6;
+        }
+        
+        pre {
+            background: #0a0a0a;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        code {
+            color: #5eead4;
+        }
+    </style>
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 KYNSEY Thinking Separator Test</h1>
+        
+        <div class="test-section">
+            <h2>Test Controls</h2>
+            <button class="test-button" onclick="testBasicThinking()">
+                Test Basic Thinking
+            </button>
+            <button class="test-button" onclick="testComplexThinking()">
+                Test Complex Thinking
+            </button>
+            <button class="test-button" onclick="testNoThinking()">
+                Test No Thinking
+            </button>
+            <button class="test-button" onclick="clearMessages()">
+                Clear Messages
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h2>Messages</h2>
+            <div id="messages"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Mock addAIMessage function for testing
+        window.addAIMessage = function(content, suggestions) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ai-message';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = content;
+            
+            messageDiv.appendChild(contentDiv);
+            messagesContainer.appendChild(messageDiv);
+            
+            console.log('Added AI message:', content);
+        };
+        
+        function testBasicThinking() {
+            const message = `<thinking>
+The user is asking for a test of the thinking separator.
+I should demonstrate how the thinking process is separated from the answer.
+This is where I would normally process the request internally.
+</thinking>
+
+This is the actual answer that the user will see. The thinking process above has been separated into a collapsible section that can be toggled on demand.`;
+            
+            window.addAIMessage(message);
+        }
+        
+        function testComplexThinking() {
+            const message = `<thinking>
+This is a more complex thinking example with multiple steps:
+
+1. First, I analyze the user's request
+2. Then I consider different approaches:
+   - Option A: Direct response
+   - Option B: Detailed explanation
+   - Option C: Step-by-step guide
+   
+3. I evaluate the pros and cons of each approach
+4. I decide on the best course of action
+5. I formulate my response
+
+This demonstrates how longer thinking processes can be cleanly separated.
+</thinking>
+
+Here's a comprehensive answer with multiple parts:
+
+**Section 1: Introduction**
+This demonstrates the thinking separator with more complex content.
+
+**Section 2: Key Features**
+- Thinking is hidden by default
+- Users can toggle visibility
+- Markdown formatting is preserved
+- Clean separation of concerns
+
+**Section 3: Benefits**
+1. Cleaner interface
+2. Optional transparency
+3. Better user experience`;
+            
+            window.addAIMessage(message);
+        }
+        
+        function testNoThinking() {
+            const message = `This is a regular message without any thinking process. It should appear normally without any thinking section.`;
+            
+            window.addAIMessage(message);
+        }
+        
+        function clearMessages() {
+            document.getElementById('messages').innerHTML = '';
+        }
+    </script>
+    
+    <!-- Load the thinking separator -->
+    <script src="thinking-separator.js"></script>
+</body>
+</html>

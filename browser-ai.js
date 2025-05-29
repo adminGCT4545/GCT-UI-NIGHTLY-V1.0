@@ -78,7 +78,7 @@ const BrowserAI = (function() {
             if (lmStudioUrl) {
                 aiModel = {
                     url: lmStudioUrl,
-                    model: 'llama-3.2-3b-instruct'
+                    model: '30b-a3b'
                 };
                 console.log('[BrowserAI] AI model configured:', aiModel);
             }

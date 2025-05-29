@@ -28,7 +28,7 @@ router.post('/process', async (req, res) => {
         }
         
         // Get active model from app settings
-        const activeModel = req.app.get('activeModel') || 'llama3.2:3b-instruct-fp16';
+        const activeModel = req.app.get('activeModel') || '30b-a3b';
         
         // Clean up the transcription
         const processed = processTranscription(transcription);

@@ -6,7 +6,7 @@ problem-solving, creative brainstorming, and document analysis.`;
 
 // API Configuration for Ollama
 const API_BASE = 'http://localhost:11434'; // Ollama API endpoint
-const MODEL_NAME = 'llama3.2:3b-instruct-fp16'; // Specific model to use
+const MODEL_NAME = '30b-a3b'; // Specific model to use
 const ENDPOINTS = {
   GENERATE: `${API_BASE}/api/generate`,
   CHAT: `${API_BASE}/api/generate`,

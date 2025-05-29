@@ -74,7 +74,7 @@ router.post('/upload', upload.single('document'), async (req, res) => {
         
         // Process the uploaded document
         const documentInfo = await processDocument(req.file);
-        const activeModel = req.app.get('activeModel') || 'llama3.2:3b-instruct-fp16';
+        const activeModel = req.app.get('activeModel') || '30b-a3b';
         
         // Generate a summary of the document
         const summary = await summarizeDocument(documentInfo.extractedText, activeModel);

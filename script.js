@@ -272,7 +272,7 @@ async function checkModelStatus() {
             throw new Error('Models API response missing expected data');
         }
         const modelDisplay = document.querySelector('.model-display');
-        const activeModel = modelDisplay ? modelDisplay.textContent : 'llama-3.2-3b-instruct';
+        const activeModel = modelDisplay ? modelDisplay.textContent : '30b-a3b';
         
         const isModelLoaded = data.data.some(model => model.id === activeModel);
         
@@ -295,7 +295,7 @@ async function checkModelStatus() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: 'llama-3.2-3b-instruct',
+                    model: '30b-a3b',
                     messages: [{ role: 'user', content: 'test' }],
                     max_tokens: 1,
                     temperature: 0.1
@@ -305,7 +305,7 @@ async function checkModelStatus() {
             if (testResponse.ok) {
                 modelStatus = {
                     isLoaded: true,
-                    currentModel: 'llama-3.2-3b-instruct',
+                    currentModel: '30b-a3b',
                     error: null,
                     lastCheck: Date.now()
                 };
@@ -986,7 +986,7 @@ async function sendMessage() {
             }
             const { API_URL, API_TIMEOUT } = Config.get();
             const modelDisplay = document.querySelector('.model-display');
-            const activeModel = modelDisplay ? modelDisplay.textContent : 'llama-3.2-3b-instruct';
+            const activeModel = modelDisplay ? modelDisplay.textContent : '30b-a3b';
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT || 30000);

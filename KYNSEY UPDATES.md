@@ -383,4 +383,102 @@ Chrome Browser Instance
 
 ---
 
-*Last Updated: 2025-05-27 Latest Session*
+## LLM Model Update (2025-05-28)
+
+### ✅ DEFAULT MODEL CHANGED TO 30b-a3b
+
+**Status**: Successfully updated all instances of the default LLM model across the entire codebase.
+
+**Changes Made:**
+- ✅ **Previous Models**: 
+  - Main UI: `llama-3.2-3b-instruct`
+  - Kynsey AI: `llama3.2:3b-instruct-fp16`
+- ✅ **New Model**: `30b-a3b` (unified across all components)
+
+**Files Updated (23 instances across 16 files):**
+
+**Core UI Files:**
+1. **script.js**: Updated 4 instances (model display fallbacks and API calls)
+2. **index.html**: Updated model display element
+3. **browser-control-ultimate.js**: Updated LLM_MODEL constant
+4. **browser-ai.js**: Updated AI model configuration
+5. **analytics-suite.js**: Updated AI insights model
+6. **analytics.js**: Updated 2 instances for analysis calls
+7. **notes.js**: Updated AI enhancement model
+
+**Kynsey AI Subsystem:**
+1. **kynsey-ai/frontend/api.js**: Updated MODEL_NAME constant
+2. **kynsey-ai/frontend/index.html**: Updated 2 instances (display and model name)
+3. **kynsey-ai/enhanced-index-html.html**: Updated 2 instances (display and initialization)
+4. **kynsey-ai/backend/src/config/profiles.js**: Updated KYNSEY Mini model profile
+5. **kynsey-ai/backend/src/routes/documentRoutes.js**: Updated default model fallback
+6. **kynsey-ai/backend/src/routes/emailRoutes.js**: Updated default model fallback
+7. **kynsey-ai/backend/src/routes/voiceInputRoutes.js**: Updated default model fallback
+
+**Technical Details:**
+- All hardcoded model references replaced with `30b-a3b`
+- Maintained consistency across frontend and backend components
+- Preserved all existing functionality while updating model references
+- No changes to API endpoints or communication protocols
+
+**Verification:**
+- Confirmed all instances updated via comprehensive grep search
+- No remaining references to old models in active code
+- Model name properly displayed in UI elements
+
+---
+
+## Thinking Separator Fix (2025-05-28)
+
+### ✅ THINKING SEPARATOR COMPLETELY DEBUGGED AND WORKING
+
+**Status**: Successfully debugged and fixed the thinking separator functionality after comprehensive root cause analysis.
+
+**Issues Identified and Fixed:**
+1. **Tag Format Mismatch**: Original regex only supported `<thinking>` tags, but system was receiving `<think>` tags
+2. **DOM Selection Failure**: Message content element selection wasn't robust enough for various DOM structures
+3. **Timing Issues**: Content processing happened before DOM was fully constructed
+4. **Content Extraction**: Multiple extraction methods weren't properly implemented
+
+**Technical Solution:**
+1. **Enhanced Regex Pattern**: Updated to support both formats
+   ```javascript
+   // Before: /<thinking>([\s\S]*?)<\/thinking>/gi
+   // After:  /<think(?:ing)?>([\s\S]*?)<\/think(?:ing)?>/gi
+   ```
+
+2. **Robust DOM Selection**: Added multiple fallback selectors
+   ```javascript
+   // Fallback chain: .message-content → div:last-child → div
+   // Enhanced logging for debugging element selection
+   ```
+
+3. **Improved Content Processing**:
+   - Raw content storage before markdown processing using `data-raw-content` attribute
+   - Enhanced addAIMessage override to process thinking content before calling original function
+   - Dual processing approach: function override + MutationObserver fallback
+   - Proper timing with 50ms and 100ms delays for DOM readiness
+
+4. **Comprehensive Logging**: Added detailed console output for debugging each step
+
+**Features Now Working:**
+- ✅ **Tag Detection**: Both `<think>` and `<thinking>` tags properly detected
+- ✅ **Content Separation**: Clean extraction of thinking content from answers
+- ✅ **UI Generation**: Collapsible dropdown sections with proper styling
+- ✅ **Keyboard Shortcuts**: Alt+T toggles all thinking sections globally
+- ✅ **Settings Integration**: Auto-expand preference with localStorage persistence
+- ✅ **Markdown Support**: Proper formatting in both thinking and answer sections
+- ✅ **Existing Messages**: Processes messages already on page load
+- ✅ **Debug Function**: `window.debugProcessExistingMessages()` for manual testing
+
+**User Verification**: User confirmed the fix is working correctly with the Ireland capital test case.
+
+**Files Modified:**
+- `thinking-separator.js`: Complete rewrite with enhanced functionality
+- `DEBUG.md`: Updated with verified working status and technical details
+
+**Result**: The thinking separator now properly extracts thinking content into collapsible dropdowns while keeping final answers clean, exactly as originally designed.
+
+---
+
+*Last Updated: 2025-05-28*

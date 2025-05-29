@@ -6,7 +6,7 @@
 export const modelProfiles = [
     {
         name: 'KYNSEY Mini',
-        modelId: 'llama3.2:3b-instruct-fp16',
+        modelId: '30b-a3b',
         description: 'Lightweight model optimized for quick responses and basic tasks'
     },
     {

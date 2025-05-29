@@ -1907,7 +1907,7 @@ Please provide the enhanced version while maintaining any important information 
                             { role: "system", content: "You are KYNSEY, a helpful assistant that helps users enhance their notes." },
                             { role: "user", content: prompt }
                         ],
-                        model: "llama-3.2-3b-instruct", // Use an available model from the list
+                        model: "30b-a3b", // Use an available model from the list
                         temperature: 0.7,
                         max_tokens: 500
                     })

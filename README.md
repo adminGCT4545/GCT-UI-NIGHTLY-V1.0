@@ -1,123 +1,73 @@
-# GCT UI (VLM NIGHTLY) - Dockerized
+# GCT UI NIGHTLY V1.0
 
-This repository contains a Dockerized version of the GCT UI (VLM NIGHTLY) application.
-
-## Features
-
-- Web-based UI for interacting with LM Studio
-- Notes functionality with Markdown support
-- AI-powered chat interface
-- Containerized for easy deployment
-
-## Prerequisites
-
-- Docker
-- Docker Compose (optional, but recommended)
+GCT UI with integrated KYNSEY AI Assistant - A comprehensive web application featuring chat, browser control, analytics, notes, and admin capabilities.
 
 ## Quick Start
 
-### Using Docker Compose (Recommended)
+1. Install dependencies:
+   ```bash
+   npm install
+   cd kynsey-ai/backend && npm install
+   ```
 
-1. Clone this repository
-2. Navigate to the repository directory
-3. Run the application:
+2. Start the browser control server (required for browser automation):
+   ```bash
+   npm run browser-server
+   ```
+
+3. (Optional) Start the Kynsey AI backend for advanced features:
+   ```bash
+   npm run kynsey-backend
+   ```
+
+4. Open `index.html` in your browser
+
+## Features
+
+- **KYNSEY AI Chat**: Integrated AI assistant with natural language processing
+- **Browser Control**: Automated browser actions with Puppeteer integration
+- **Analytics Suite**: Power BI-like data analysis and visualization
+- **Notes Application**: Markdown editor with WYSIWYG mode
+- **Admin Panel**: User management and system configuration
+- **Command Palette**: Quick access to all features (Ctrl+K)
+
+## Architecture
+
+- **Main UI**: `index.html` - Primary interface with all integrated features
+- **Browser Server**: `browser-server-ultimate.js` - Puppeteer server for browser automation (port 3456)
+- **Kynsey Backend**: `kynsey-ai/backend/` - Additional AI services (port 3002)
+
+## Key Commands
+
+- `npm start` - Instructions to open the UI
+- `npm run browser-server` - Start browser control server
+- `npm run kynsey-backend` - Start Kynsey AI backend
+- `npm run kynsey-dev` - Start Kynsey backend in development mode
+
+## Docker Support
+
+For containerized deployment:
 
 ```bash
-# For Docker Compose V2 (recommended)
+# Using Docker Compose
 docker compose up -d
 
-# For older Docker Compose V1 (if the above doesn't work)
-docker-compose up -d
+# Access at http://localhost:9091
 ```
-
-4. Access the application in your browser at: `http://localhost:9091`
-
-### Using Docker directly
-
-1. Build the Docker image:
-
-```bash
-docker build -t gct-ui-vlm .
-```
-
-2. Run the container:
-
-```bash
-docker run -d -p 9091:9091 --name gct-ui-vlm gct-ui-vlm
-```
-
-3. Access the application in your browser at: `http://localhost:9091`
 
 ## Configuration
 
-### Configuration Options
+Default API endpoint: `http://192.168.1.7:4545`
+Default LLM model: `30b-a3b`
 
-The application supports the following environment variables for configuration:
+Configure in `config.js` as needed.
 
-- `API_URL`: The base URL for the LM Studio API (default: `http://192.168.1.7:4545`)
-- `API_TIMEOUT`: Timeout in milliseconds for API requests (default: `30000`)
-- `MAX_RETRIES`: Maximum number of retry attempts for failed API requests (default: `3`)
+## Documentation
 
-**Important Note:** If you see a 404 error in the browser console, it likely means the LM Studio backend is not running at the configured address. Make sure your LM Studio application is running and accessible at the configured URL.
-
-You can change these settings by modifying the environment variables in the `docker-compose.yml` file:
-
-```yaml
-environment:
-  - API_URL=http://your-lm-studio-api:4545
-  - API_TIMEOUT=60000
-  - MAX_RETRIES=5
-```
-
-Or when running with Docker directly:
-
-```bash
-docker run -d -p 9091:9091 \
-  -e API_URL=http://your-lm-studio-api:4545 \
-  -e API_TIMEOUT=60000 \
-  -e MAX_RETRIES=5 \
-  --name gct-ui-vlm gct-ui-vlm
-```
-
-## Troubleshooting
-
-### Connection Issues
-
-1. **404 Error in Console**: If you see a "Failed to load resource: the server responded with a status of 404 (Not Found)" error in your browser console, check that:
-   - LM Studio is running on your machine
-   - The API URL in the configuration matches where LM Studio is serving its API
-   - Your firewall or network settings allow connections to the LM Studio API
-
-2. **Docker Compose Command Not Working**: If you encounter errors with `docker-compose`, try using the Docker Compose V2 command format: `docker compose` (without the hyphen).
-
-## Development
-
-For development purposes, you can uncomment the volume mounts in the `docker-compose.yml` file to enable live updates without rebuilding the container:
-
-```yaml
-volumes:
-  - ./index.html:/usr/share/nginx/html/index.html
-  - ./script.js:/usr/share/nginx/html/script.js
-  - ./notes.js:/usr/share/nginx/html/notes.js
-  - ./styles.css:/usr/share/nginx/html/styles.css
-  - ./config.template.js:/usr/share/nginx/html/config.template.js
-  - ./css:/usr/share/nginx/html/css
-  - ./js:/usr/share/nginx/html/js
-```
-
-### Configuration System
-
-The application uses a two-part configuration system:
-
-1. **Environment Variables**: Set through Docker environment variables
-2. **Configuration Template**: The `config.template.js` file contains the configuration logic
-
-When the container starts:
-1. Environment variables are injected into the `config.js` file
-2. The content of `config.template.js` is appended to `config.js`
-3. The resulting file provides a complete configuration system with environment variable support
-
-This approach allows for flexible configuration while maintaining the application's configuration logic.
+- `KYNSEY UPDATES.md` - Latest feature updates and implementation status
+- `BROWSER_INTEGRATION_PLAN.md` - Browser control feature roadmap  
+- `GCT_UI_ENHANCEMENT_PLAN.md` - UI improvement plans
+- `CLAUDE RULES.md` - Development guidelines
 
 ## License
 

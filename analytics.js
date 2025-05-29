@@ -356,7 +356,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'llama-3.2-3b-instruct',
+                        model: '30b-a3b',
                         messages: [
                             { role: 'system', content: systemPrompt },
                             { role: 'user', content: userPrompt }
@@ -694,7 +694,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        model: 'llama-3.2-3b-instruct',
+                        model: '30b-a3b',
                         messages: [
                             { role: 'system', content: 'You are a business analyst. Provide brief, actionable insights.' },
                             { role: 'user', content: prompt }
